@@ -107,6 +107,6 @@ resource "aws_rds_cluster_instance" "aurora_cluster_instance" {
 resource "random_password" "aurora_password" {
   length                 = 16
   special                = true
-  override_special       = "!@'#$?"
+  override_special       = "@/ "
 }
 

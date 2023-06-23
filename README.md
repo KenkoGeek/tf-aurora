@@ -73,6 +73,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_allowed_ip_addresses"></a> [allowed\_ip\_addresses](#input\_allowed\_ip\_addresses) | Comma-separated list of allowed IP addresses for security group ingress | `string` | `""` | no |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region where the EC2 instance will be deployed | `string` | `"us-east-1"` | no |
 | <a name="input_db_engine"></a> [db\_engine](#input\_db\_engine) | Database engine (mysql or postgres) | `string` | `"aurora-mysql"` | no |
 | <a name="input_db_name"></a> [db\_name](#input\_db\_name) | Initial database name | `string` | `"mydatabase"` | no |
 | <a name="input_db_username"></a> [db\_username](#input\_db\_username) | Initial username | `string` | `"myuser"` | no |

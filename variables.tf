@@ -1,3 +1,13 @@
+variable "aws_region" {
+  description = "AWS region where the EC2 instance will be deployed"
+  type        = string
+  default     = "us-east-1"
+  validation {
+    condition     = can(regex("^([a-z]{2}-[a-z]+-[0-9]{1})$", var.aws_region))
+    error_message = "Invalid AWS region format. Please provide a valid region in the format 'us-west-2'."
+  }
+}
+
 variable "db_engine" {
   description = "Database engine (mysql or postgres)"
   type        = string
