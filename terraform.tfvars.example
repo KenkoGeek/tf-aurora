@@ -1,0 +1,22 @@
+allowed_ip_addresses         = ""
+db_engine                    = "aurora-mysql"
+db_name                      = "mydatabase"
+db_username                  = "myuser"
+enable_backtrack             = false
+enable_enhanced_monitoring   = false
+enable_major_version_upgrade = false
+enable_performance_insights  = false
+instance_count               = 2
+instance_type                = "db.t2.medium"
+kms_key_arn                  = ""
+project_name                 = "myproject"
+publicly_accessible          = false
+subnets = [
+  "subnet-12345678",
+  "subnet-87654321"
+]
+tags = {
+  "Environment": "Development",
+  "Owner": "Frankin Garcia"
+}
+vpc_id = "vpc-12345678"
