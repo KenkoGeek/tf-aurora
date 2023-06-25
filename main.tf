@@ -78,7 +78,8 @@ resource "aws_rds_cluster" "aurora" {
   vpc_security_group_ids      = [aws_security_group.aurora_sg.id]
   copy_tags_to_snapshot       = true
   allow_major_version_upgrade = var.enable_major_version_upgrade
-
+  storage_encrypted           = true
+  kms_key_id                  = var.kms_key_arn
   enabled_cloudwatch_logs_exports = [
     var.db_engine == "aurora-mysql" ? "audit" : "postgresql",
     var.db_engine == "aurora-mysql" ? "error" : "postgresql",
