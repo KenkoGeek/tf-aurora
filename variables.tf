@@ -13,21 +13,37 @@ variable "db_engine" {
   type        = string
   default     = "aurora-mysql"
   validation {
-    condition     = var.db_engine == "aurora-mysql" || var.db_engine == "aurora-postgres"
-    error_message = "Valid options are 'mysql' or 'postgres'"
+    condition     = var.db_engine == "aurora-mysql" || var.db_engine == "aurora-postgresql"
+    error_message = "Valid options are 'aurora-mysql or 'aurora-postgresql'"
   }
 }
 
+
+variable "backup_retention_period" {
+  description = "Number of RDS instances in the cluster"
+  type        = number
+  default     = 30
+  validation {
+    condition     = var.backup_retention_period >= 0 && var.backup_retention_period <= 35
+    error_message = "Invalid retention period. The value must be between 0 and 35 (inclusive)."
+  }
+}
 variable "enable_performance_insights" {
   description = "Indicates whether Performance Insights will be enabled"
   type        = bool
-  default     = false
+  default     = true
 }
 
-variable "enable_backtrack" {
-  description = "Indicates whether Backtrack will be enabled"
-  type        = bool
-  default     = false
+variable "backtrack_window" {
+  description = "Only for aurora MySQL, from 0 to 259200 seconds (72 hours), zero is disabled"
+  type        = number
+  default     = 86400
+
+  validation {
+    condition     = var.backtrack_window >= 0 && var.backtrack_window <= 259200
+    error_message = "Must be between zero and 259200 (72 hours)"
+  }
+
 }
 
 variable "enable_enhanced_monitoring" {
@@ -47,7 +63,7 @@ variable "instance_type" {
   type        = string
   default     = "db.t2.medium"
   validation {
-    condition     = can(regex("^db\\.(t3|t2|c5|m5|r5)\\.", var.instance_type))
+    condition     = can(regex("^db\\.(t3|t2|t4g|c5|m5|r5|r6g|r6i|r7g|x2g)\\.", var.instance_type))
     error_message = "Invalid instance type. Supported types are db.t3.*, db.t2.*, db.c5.*, db.m5.*, db.r5.*"
   }
 }
@@ -55,7 +71,7 @@ variable "instance_type" {
 variable "kms_key_arn" {
   description = "KMS key ARN for encryption"
   type        = string
-  default     = ""
+  default     = "arn:aws:kms:us-east-1:123456789012:key/e589fe53-4af7-b084-dad1-331b80f17860"
   validation {
     condition     = var.kms_key_arn == "" || can(regex("^arn:aws:kms:.*", var.kms_key_arn))
     error_message = "Invalid KMS key ARN. Please provide a valid ARN or leave it empty."
