@@ -4,6 +4,10 @@ data "aws_availability_zones" "available" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_vpc" "main" {
+  id = var.vpc_id
+}
+
 data "aws_iam_policy_document" "rds_kms_policy" {
 
   statement {
@@ -11,10 +15,10 @@ data "aws_iam_policy_document" "rds_kms_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     actions   = ["kms:*"]
-    resources = [aws_kms_key.rds_cmk.arn]
+    resources = ["*"]
   }
 
   statement {
@@ -33,7 +37,7 @@ data "aws_iam_policy_document" "rds_kms_policy" {
       "kms:ListGrants",
       "kms:DescribeKey"
     ]
-    resources = [aws_kms_key.rds_cmk.arn]
+    resources = ["*"]
   }
 
   statement {
@@ -41,7 +45,7 @@ data "aws_iam_policy_document" "rds_kms_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     actions = [
       "kms:Encrypt",
@@ -52,11 +56,11 @@ data "aws_iam_policy_document" "rds_kms_policy" {
       "kms:ListGrants",
       "kms:DescribeKey",
     ]
-    resources = [aws_kms_key.rds_cmk.arn]
+    resources = ["*"]
     condition {
       test     = "StringEquals"
       variable = "kms:ViaService"
-      values   = "rds.${var.aws_region}.amazonaws.com"
+      values   = ["rds.${var.aws_region}.amazonaws.com"]
     }
   }
 }

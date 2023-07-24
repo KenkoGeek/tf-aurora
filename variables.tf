@@ -102,7 +102,7 @@ variable "db_username" {
 variable "allowed_ip_addresses" {
   description = "Comma-separated list of allowed IP addresses for security group ingress"
   type        = string
-  default     = ""
+  default     = "192.168.10.0/24"
 }
 
 variable "project_name" {

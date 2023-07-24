@@ -26,7 +26,7 @@ resource "aws_kms_key" "rds_cmk" {
 resource "aws_kms_alias" "kms_alias" {
   count         = var.kms_key_arn == "" ? 1 : 0
   name          = "alias/${var.project_name}/rds"
-  target_key_id = aws_kms_key.rds_cmk.arn
+  target_key_id = aws_kms_key.rds_cmk[count.index].arn
 }
 
 # RDS Aurora pre-req
@@ -49,6 +49,14 @@ resource "aws_security_group" "aurora_sg" {
     to_port     = var.db_engine == "aurora-mysql" ? 3306 : 5432
     protocol    = "tcp"
     cidr_blocks = split(",", var.allowed_ip_addresses)
+  }
+
+  ingress {
+    description = "Allow incoming database connections from VPC"
+    from_port   = var.db_engine == "aurora-mysql" ? 3306 : 5432
+    to_port     = var.db_engine == "aurora-mysql" ? 3306 : 5432
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.main.cidr_block]
   }
 
   egress {
@@ -97,7 +105,7 @@ resource "aws_rds_cluster" "aurora" {
   copy_tags_to_snapshot       = true
   allow_major_version_upgrade = var.enable_major_version_upgrade
   storage_encrypted           = true
-  kms_key_id                  = var.rds_kms_key_arn == "" ? aws_kms_key.rds_cmk.arn : var.kms_key_arn
+  kms_key_id                  = var.kms_key_arn == "" ? aws_kms_key.rds_cmk[0].arn : var.kms_key_arn
   backtrack_window            = var.db_engine == "aurora-mysql" ? var.backtrack_window : 0
   enabled_cloudwatch_logs_exports = [
     var.db_engine == "aurora-mysql" ? "audit" : "postgresql",
