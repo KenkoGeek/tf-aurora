@@ -39,16 +39,16 @@ terraform fmt
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.3.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.3.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.5.1 |
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | = 1.5.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | = 5.3.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | = 3.5.1 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.5.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.3.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.5.1 |
 
 ## Modules
 
@@ -58,16 +58,20 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_db_subnet_group.aurora_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/db_subnet_group) | resource |
-| [aws_rds_cluster.aurora](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/rds_cluster) | resource |
-| [aws_rds_cluster_instance.aurora_cluster_instance](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/rds_cluster_instance) | resource |
-| [aws_rds_cluster_parameter_group.aurora](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/rds_cluster_parameter_group) | resource |
-| [aws_secretsmanager_secret.aurora_password_secret](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/secretsmanager_secret) | resource |
-| [aws_secretsmanager_secret_version.aurora_password_version](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/secretsmanager_secret_version) | resource |
-| [aws_security_group.aurora_sg](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/resources/security_group) | resource |
-| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.5.1/docs/resources/id) | resource |
-| [random_password.aurora_password](https://registry.terraform.io/providers/hashicorp/random/3.5.1/docs/resources/password) | resource |
-| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/5.3.0/docs/data-sources/availability_zones) | data source |
+| [aws_db_subnet_group.aurora_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
+| [aws_kms_alias.kms_alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.rds_cmk](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_rds_cluster.aurora](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) | resource |
+| [aws_rds_cluster_instance.aurora_cluster_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance) | resource |
+| [aws_rds_cluster_parameter_group.aurora](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_parameter_group) | resource |
+| [aws_secretsmanager_secret.aurora_password_secret](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
+| [aws_secretsmanager_secret_version.aurora_password_version](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
+| [aws_security_group.aurora_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [random_password.aurora_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.rds_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
@@ -96,8 +100,9 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cluster_endpoint"></a> [cluster\_endpoint](#output\_cluster\_endpoint) | Endpoint of the Aurora cluster |
-| <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | ID of the Aurora cluster |
-| <a name="output_cluster_username"></a> [cluster\_username](#output\_cluster\_username) | Username of the Aurora cluster |
+| <a name="output_aurora_cluster_endpoint"></a> [aurora\_cluster\_endpoint](#output\_aurora\_cluster\_endpoint) | Endpoint of the Aurora cluster |
+| <a name="output_aurora_cluster_id"></a> [aurora\_cluster\_id](#output\_aurora\_cluster\_id) | ID of the Aurora cluster |
+| <a name="output_aurora_cluster_port"></a> [aurora\_cluster\_port](#output\_aurora\_cluster\_port) | Aurora connection port. |
+| <a name="output_aurora_cluster_username"></a> [aurora\_cluster\_username](#output\_aurora\_cluster\_username) | Username of the Aurora cluster |
 
 

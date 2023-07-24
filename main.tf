@@ -7,14 +7,29 @@
 #   }
 # }
 
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
 resource "random_id" "id" {
   byte_length = 8
 }
 
+# KMS Key for encryption
+resource "aws_kms_key" "rds_cmk" {
+  count                   = var.kms_key_arn == "" ? 1 : 0
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+  multi_region            = true
+  tags                    = var.tags
+  description             = "KMS key for RDS encryption"
+  policy                  = data.aws_iam_policy_document.rds_kms_policy.json
+}
+
+resource "aws_kms_alias" "kms_alias" {
+  count         = var.kms_key_arn == "" ? 1 : 0
+  name          = "alias/${var.project_name}/rds"
+  target_key_id = aws_kms_key.rds_cmk.arn
+}
+
+# RDS Aurora pre-req
 resource "aws_db_subnet_group" "aurora_subnet_group" {
   name       = "${var.project_name}-${var.db_engine}-subnet-group"
   subnet_ids = var.subnets
@@ -64,6 +79,7 @@ resource "aws_secretsmanager_secret_version" "aurora_password_version" {
   secret_string = random_password.aurora_password.result
 }
 
+# RDS Aurora cluster
 resource "aws_rds_cluster" "aurora" {
   cluster_identifier          = "${var.project_name}-aurora"
   apply_immediately           = true
@@ -81,7 +97,7 @@ resource "aws_rds_cluster" "aurora" {
   copy_tags_to_snapshot       = true
   allow_major_version_upgrade = var.enable_major_version_upgrade
   storage_encrypted           = true
-  kms_key_id                  = var.kms_key_arn
+  kms_key_id                  = var.rds_kms_key_arn == "" ? aws_kms_key.rds_cmk.arn  : var.kms_key_arn
   backtrack_window            = var.db_engine == "aurora-mysql" ? var.backtrack_window : 0
   enabled_cloudwatch_logs_exports = [
     var.db_engine == "aurora-mysql" ? "audit" : "postgresql",
@@ -97,6 +113,7 @@ resource "aws_rds_cluster" "aurora" {
   tags = var.tags
 }
 
+# RDS Aurora instances
 resource "aws_rds_cluster_instance" "aurora_cluster_instance" {
   count                           = var.instance_count
   cluster_identifier              = aws_rds_cluster.aurora.id

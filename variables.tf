@@ -18,7 +18,6 @@ variable "db_engine" {
   }
 }
 
-
 variable "backup_retention_period" {
   description = "Number of RDS instances in the cluster"
   type        = number
