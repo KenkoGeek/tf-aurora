@@ -39,8 +39,8 @@ terraform fmt
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.3.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.5.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.3.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
 
 ## Requirements
 
@@ -72,15 +72,17 @@ No modules.
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.rds_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_vpc.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_allowed_ip_addresses"></a> [allowed\_ip\_addresses](#input\_allowed\_ip\_addresses) | Comma-separated list of allowed IP addresses for security group ingress | `string` | `""` | no |
+| <a name="input_allowed_ip_addresses"></a> [allowed\_ip\_addresses](#input\_allowed\_ip\_addresses) | Comma-separated list of allowed IP addresses for security group ingress | `string` | `"192.168.10.0/24"` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region where the EC2 instance will be deployed | `string` | `"us-east-1"` | no |
 | <a name="input_backtrack_window"></a> [backtrack\_window](#input\_backtrack\_window) | Only for aurora MySQL, from 0 to 259200 seconds (72 hours), zero is disabled | `number` | `86400` | no |
 | <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | Number of RDS instances in the cluster | `number` | `30` | no |
+| <a name="input_create_kms_key"></a> [create\_kms\_key](#input\_create\_kms\_key) | Manage a KMS key specific to DB, else use the define key arn in 'kms\_key\_arn'. | `bool` | `false` | no |
 | <a name="input_db_engine"></a> [db\_engine](#input\_db\_engine) | Database engine (mysql or postgres) | `string` | `"aurora-mysql"` | no |
 | <a name="input_db_name"></a> [db\_name](#input\_db\_name) | Initial database name | `string` | `"mydatabase"` | no |
 | <a name="input_db_username"></a> [db\_username](#input\_db\_username) | Initial username | `string` | `"myuser"` | no |
@@ -89,7 +91,7 @@ No modules.
 | <a name="input_enable_performance_insights"></a> [enable\_performance\_insights](#input\_enable\_performance\_insights) | Indicates whether Performance Insights will be enabled | `bool` | `true` | no |
 | <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | Number of RDS instances in the cluster | `number` | `2` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | RDS instance type | `string` | `"db.t2.medium"` | no |
-| <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | KMS key ARN for encryption | `string` | `"arn:aws:kms:us-east-1:123456789012:key/e589fe53-4af7-b084-dad1-331b80f17860"` | no |
+| <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | KMS key ARN for encryption. 'create\_kms\_key' must be 'false'. | `string` | `"arn:aws:kms:us-east-1:123456789012:key/e589fe53-4af7-b084-dad1-331b80f17860"` | no |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Name of the project | `string` | `"myproject"` | no |
 | <a name="input_publicly_accessible"></a> [publicly\_accessible](#input\_publicly\_accessible) | Indicates whether the RDS instance is publicly accessible | `bool` | `false` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Subnets where the RDS instance will be deployed | `list(string)` | <pre>[<br>  "subnet-12345678",<br>  "subnet-87654321"<br>]</pre> | no |

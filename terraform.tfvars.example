@@ -1,7 +1,8 @@
-allowed_ip_addresses         = ""
+allowed_ip_addresses         = "192.168.10.0/24"
 aws_region                   = "us-east-1"
 backtrack_window             = 86400
 backup_retention_period      = 30
+create_kms_key               = false
 db_engine                    = "aurora-mysql"
 db_name                      = "mydatabase"
 db_username                  = "myuser"

@@ -67,8 +67,14 @@ variable "instance_type" {
   }
 }
 
+variable "create_kms_key" {
+  type        = bool
+  default     = false
+  description = "Manage a KMS key specific to DB, else use the define key arn in 'kms_key_arn'."
+}
+
 variable "kms_key_arn" {
-  description = "KMS key ARN for encryption"
+  description = "KMS key ARN for encryption. 'create_kms_key' must be 'false'."
   type        = string
   default     = "arn:aws:kms:us-east-1:123456789012:key/e589fe53-4af7-b084-dad1-331b80f17860"
   validation {
