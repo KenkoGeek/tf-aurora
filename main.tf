@@ -87,7 +87,7 @@ resource "aws_rds_cluster" "aurora" {
   copy_tags_to_snapshot       = true
   allow_major_version_upgrade = var.enable_major_version_upgrade
   storage_encrypted           = true
-  kms_key_id                  = coalesce(var.kms_key_arn, data.aws_kms_key.default_rds.arn)
+  kms_key_id                  = var.kms_key_arn == "" ? data.aws_kms_key.default_rds.arn : var.kms_key_arn
   backtrack_window            = var.db_engine == "aurora-mysql" ? var.backtrack_window : 0
   enabled_cloudwatch_logs_exports = [
     var.db_engine == "aurora-mysql" ? "audit" : "postgresql",
