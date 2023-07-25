@@ -33,14 +33,6 @@ resource "aws_security_group" "aurora_sg" {
     cidr_blocks = split(",", var.allowed_ip_addresses)
   }
 
-  ingress {
-    description = "Allow incoming database connections from VPC"
-    from_port   = var.db_engine == "aurora-mysql" ? 3306 : 5432
-    to_port     = var.db_engine == "aurora-mysql" ? 3306 : 5432
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.main.cidr_block]
-  }
-
   egress {
     description = "Allow outbound traffic"
     from_port   = 0
@@ -48,6 +40,16 @@ resource "aws_security_group" "aurora_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:aws-vpc-no-public-egress-sgr
   }
+}
+
+resource "aws_security_group_rule" "local_vpc" {
+  type              = "ingress"
+  description       = "Allow incoming database connections"
+  from_port         = var.db_engine == "aurora-mysql" ? 3306 : 5432
+  to_port           = var.db_engine == "aurora-mysql" ? 3306 : 5432
+  protocol          = "tcp"
+  cidr_blocks       = [data.aws_vpc.main.cidr_block]
+  security_group_id = aws_security_group.aurora_sg.id
 }
 
 resource "aws_rds_cluster_parameter_group" "aurora" {
