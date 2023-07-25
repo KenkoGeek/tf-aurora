@@ -67,12 +67,6 @@ variable "instance_type" {
   }
 }
 
-variable "create_kms_key" {
-  type        = bool
-  default     = false
-  description = "Manage a KMS key specific to DB, else use the define key arn in 'kms_key_arn'."
-}
-
 variable "kms_key_arn" {
   description = "KMS key ARN for encryption. 'create_kms_key' must be 'false'."
   type        = string
