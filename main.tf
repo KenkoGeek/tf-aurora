@@ -13,7 +13,7 @@ resource "random_id" "id" {
 
 # KMS Key for encryption
 resource "aws_kms_key" "rds_cmk" {
-  enabled                 = var.create_kms_key
+  count                   = var.create_kms_key ? 1 : 0
   key_usage               = "ENCRYPT_DECRYPT"
   deletion_window_in_days = 7
   enable_key_rotation     = true
@@ -24,7 +24,7 @@ resource "aws_kms_key" "rds_cmk" {
 }
 
 resource "aws_kms_alias" "kms_alias" {
-  enabled       = var.create_kms_key
+  count         = var.create_kms_key ? 1 : 0
   name          = "alias/${var.project_name}/rds"
   target_key_id = aws_kms_key.rds_cmk[count.index].arn
 }
