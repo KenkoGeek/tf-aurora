@@ -4,6 +4,10 @@ data "aws_availability_zones" "available" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_kms_key" "default_rds" {
+  key_id = "alias/aws/rds"
+}
+
 data "aws_vpc" "main" {
   id = var.vpc_id
 }

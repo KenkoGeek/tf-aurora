@@ -11,24 +11,6 @@ resource "random_id" "id" {
   byte_length = 8
 }
 
-# KMS Key for encryption
-resource "aws_kms_key" "rds_cmk" {
-  count                   = var.create_kms_key ? 1 : 0
-  key_usage               = "ENCRYPT_DECRYPT"
-  deletion_window_in_days = 7
-  enable_key_rotation     = true
-  multi_region            = true
-  tags                    = var.tags
-  description             = "KMS key for RDS encryption."
-  policy                  = data.aws_iam_policy_document.rds_kms_policy.json
-}
-
-resource "aws_kms_alias" "kms_alias" {
-  count         = var.create_kms_key ? 1 : 0
-  name          = "alias/${var.project_name}/rds"
-  target_key_id = aws_kms_key.rds_cmk[count.index].arn
-}
-
 # RDS Aurora pre-req
 resource "aws_db_subnet_group" "aurora_subnet_group" {
   name       = "${var.project_name}-${var.db_engine}-subnet-group"
@@ -105,7 +87,7 @@ resource "aws_rds_cluster" "aurora" {
   copy_tags_to_snapshot       = true
   allow_major_version_upgrade = var.enable_major_version_upgrade
   storage_encrypted           = true
-  kms_key_id                  = coalesce(var.kms_key_arn, aws_kms_key.rds_cmk[0].arn)
+  kms_key_id                  = coalesce(var.kms_key_arn, data.aws_kms_key.default_rds.arn)
   backtrack_window            = var.db_engine == "aurora-mysql" ? var.backtrack_window : 0
   enabled_cloudwatch_logs_exports = [
     var.db_engine == "aurora-mysql" ? "audit" : "postgresql",
